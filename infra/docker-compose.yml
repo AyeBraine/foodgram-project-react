@@ -10,16 +10,11 @@ services:
     env_file:
       - ./.env
 
-  frontend:
-    image: ayebraine/foodgram-frontend:latest
-    volumes:
-      - static_value:/app/result_build/
-
   web:
     image: ayebraine/foodgram-backend:latest
     volumes:
-      - static_value:/app/static/
-      - media_value:/app/media/
+      - static:/app/static/
+      - media:/app/media/
     restart: always
     ports:
       - "8000:8000"
@@ -28,17 +23,26 @@ services:
     env_file:
       - ./.env
 
+frontend:
+    image: ayebraine/foodgram-frontend:latest
+    links:
+      - web
+    volumes:
+      - ./frontend/:/app/result_build/
+
   nginx:
     image: nginx:1.19.3
     ports:
       - "80:80"
     volumes:
-      - static_value:/var/html/static/
-      - media_value:/var/html/media/
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./static:/var/html/static/django/
+      - ./media:/var/html/media/
+      - ./frontend/build:/usr/share/nginx/html
     depends_on:
       - web
 
 volumes:
-  static_value:
-  media_value:
+  postgres_data:
+  static:
+  media:
