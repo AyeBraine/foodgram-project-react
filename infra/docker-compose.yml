@@ -43,7 +43,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - static:/var/html/static/
       - media:/var/html/media/
-      - ../frontend/build:/var/html/
+      - ../frontend/build:/usr/share/nginx/html/
     depends_on:
       - web
 
