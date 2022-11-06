@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - var/lib/postgresql/data/
     env_file:
       - ./.env
 
@@ -24,14 +24,7 @@ services:
       - ./.env
 
   frontend:
-    container_name: frontend
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    depends_on:
-      - web
-    links:
-      - web
+    image: ayebraine/foodgram-frontend:latest
     volumes:
       - frontend:/app/result_build/
 
@@ -49,7 +42,6 @@ services:
       - web
 
 volumes:
-  postgres_data:
   static:
   media:
   frontend:
