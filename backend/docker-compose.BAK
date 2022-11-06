@@ -11,22 +11,25 @@ services:
       - ./.env
 
   web:
-    build: .
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - static:/app/static/
+      - media:/app/media/
     restart: always
     ports:
-      - 8001:8000
+      - "8000:8000"
     depends_on:
       - db
     env_file:
-      - .env
-    volumes:
-    - ./:/code
+      - ./.env
 
   frontend:
-    container_name: frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     depends_on:
       - web
     links:
