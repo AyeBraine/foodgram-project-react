@@ -2,7 +2,7 @@
 
 # Продуктовый помощник Foodgram: сайт с рецептами
 
-*Статус workflow проекта:* ![YaMDB CI/CD workflow](https://github.com/AyeBraine/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![YaMDB CI/CD workflow](https://github.com/AyeBraine/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 ## Описание проекта
 
