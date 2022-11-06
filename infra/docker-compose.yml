@@ -23,6 +23,11 @@ services:
     env_file:
       - ./.env
 
+  frontend:
+    image: ayebraine/foodgram-frontend:latest
+    volumes:
+      - ../frontend:/app/result_build/
+
   nginx:
     image: nginx:1.19.3
     ports:
