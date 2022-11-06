@@ -23,7 +23,7 @@ services:
     env_file:
       - ./.env
 
-frontend:
+  frontend:
     image: ayebraine/foodgram-frontend:latest
     links:
       - web
