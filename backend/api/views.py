@@ -40,7 +40,6 @@ class IngredientFilter(dfilters.FilterSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     """ Вьюсет для вывода и фильтрации рецептов. """
     queryset = Recipe.objects.all().order_by('-pub_date')
-    permission_classes = 
     pagination_class = AdjustablePagination
     filter_backends = (dfilters.DjangoFilterBackend,)
     filterset_class = RecipeFilter
