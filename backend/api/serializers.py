@@ -2,6 +2,7 @@
 from django.core.exceptions import ValidationError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import Ingredient, ReciIngredi, Recipe, Tag
 from users.models import Follow
@@ -10,13 +11,14 @@ from users.serializers import UserReadSerializer
 
 class TagSerializer(serializers.ModelSerializer):
     """ Сериализатор тегов. """
+    pagination_class = None
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientPageSerializer(serializers.ModelSerializer):
-    """ Сериализатор для простого показа ингредиентов. """
+    """ Сериализатор для ингредиентов. """
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
@@ -32,6 +34,10 @@ class ReciIngrediReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReciIngredi
         fields = ('id', 'name', 'measurement_unit', 'amount')
+        validators = (UniqueTogetherValidator(
+                queryset=ReciIngredi.objects.all(),
+                fields=('recipe', 'ingredient')),
+        )
 
 
 class ReciIngrediWriteSerializer(serializers.ModelSerializer):
@@ -130,6 +136,15 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'ingredients', 'tags', 'image',
                   'name', 'text', 'cooking_time', 'author')
         read_only_fields = ('id', 'author', 'tags')
+
+    def validate(self, data):
+        ingredients = self.initial_data.get('ingredients')
+        ingredients_list = [ingredient['id'] for ingredient in ingredients]
+        if len(ingredients_list) != len(set(ingredients_list)):
+            raise serializers.ValidationError(
+                'Проверьте, какой-то ингредиент был выбран более 1 раза'
+            )
+        return data
 
     def create(self, validated_data):
         """ Создаёт вложенные сериализаторы tag и ingredient. """
