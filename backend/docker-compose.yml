@@ -10,29 +10,27 @@ services:
     env_file:
       - ./.env
 
+  frontend:
+    image: ayebraine/foodgram-frontend:latest
+    depends_on:
+      - db
+    volumes:
+      - ./frontend/:/app/result_build/
+
   web:
-    build: .
+    image: ayebraine/foodgram-backend:latest
     restart: always
     ports:
       - 8001:8000
     depends_on:
-      - db
+      - frontend
+    links:
+      - frontend
     env_file:
       - .env
     volumes:
-    - ./:/code
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    depends_on:
-      - web
-    links:
-      - web
-    volumes:
-      - ./frontend/:/app/result_build/
+      - static:/app/static/
+      - media:/app/media/
 
   nginx:
     image: nginx:1.19.3

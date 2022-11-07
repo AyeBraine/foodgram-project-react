@@ -8,7 +8,7 @@ load_dotenv()
 
 SECRET_KEY = '@n$ryvt1+(p@w%w4&@w_rf)=9+20^xdekrn4g^l)dia9vyxv-q'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'web',
@@ -135,10 +135,5 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
         'user': 'users.serializers.UserReadSerializer',
-        'user_create': 'users.serializers.UserCreateSerializer'
-    },
-    'PERMISSIONS': {
-        'user': ['rest_framework.permissions.IsAuthenticated'],
-        'user_list': ['rest_framework.permissions.AllowAny'],
     },
 }
