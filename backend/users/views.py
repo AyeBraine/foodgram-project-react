@@ -10,19 +10,8 @@ from rest_framework.response import Response
 from api.pagination import AdjustablePagination
 from api.serializers import SubscriptionsSerializer, UserReadSerializer
 from users.models import Follow, User
-# from users.serializers import UserCreateSerializer, UserSuccessSerializer
 
 User = get_user_model()
-# class UserCreateView(views.APIView):
-#     """ Вью-класс для регистрации пользователя. """
-#     def post(self, request):
-#         serializer = UserCreateSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             output = UserSuccessSerializer(request.data)
-#             return Response(output.data, status=status.HTTP_201_CREATED)
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(UserViewSet):
