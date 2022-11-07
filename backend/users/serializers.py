@@ -1,10 +1,10 @@
 # isort: skip_file
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+# from rest_framework.validators import UniqueValidator
 
 from users.models import Follow, User
-from users.validators import MeNameNotInUsername
+# from users.validators import MeNameNotInUsername
 
 
 class UserReadSerializer(serializers.ModelSerializer):

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from api.pagination import AdjustablePagination
 from api.serializers import SubscriptionsSerializer, UserReadSerializer
 from users.models import Follow, User
-from users.serializers import UserCreateSerializer, UserSuccessSerializer
+# from users.serializers import UserCreateSerializer, UserSuccessSerializer
 
 
 # class UserCreateView(views.APIView):
