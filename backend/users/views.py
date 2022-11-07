@@ -36,13 +36,12 @@ class UserViewSet(UserViewSet):
     )
     def subscriptions(self, request):
         user = request.user
-        queryset = Follow.objects.filter(user=user)
+        queryset = Follow.objects.filter(user=user).order_by('-pub_date')
         cur_page = self.paginate_queryset(queryset)
         if queryset.exists():
             serializer = SubscriptionsSerializer(
                 cur_page, many=True, context={'request': request})
-            return self.get_paginated_response(
-                serializer.data, status=status.HTTP_200_OK)
+            return self.get_paginated_response(serializer.data)
         return Response(
             'errors: Нет подписок.', status=status.HTTP_404_NOT_FOUND)
 
@@ -51,9 +50,9 @@ class UserViewSet(UserViewSet):
         permission_classes=(IsAuthenticated,),
         methods=('post', 'delete')
     )
-    def subscribe(self, request, pk=None):
+    def subscribe(self, request, id=None):
         user = request.user
-        follow = get_object_or_404(User, id=pk)
+        follow = get_object_or_404(User, id=id)
         if self.request.method == 'POST':
             if Follow.objects.filter(user=user, following=follow).exists():
                 return Response(
