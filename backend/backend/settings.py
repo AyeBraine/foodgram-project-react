@@ -127,7 +127,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': None,
     'PAGE_SIZE': 5,
 }
 
@@ -136,4 +136,5 @@ DJOSER = {
     'SERIALIZERS': {
         'user': 'users.serializers.UserReadSerializer',
     },
+
 }

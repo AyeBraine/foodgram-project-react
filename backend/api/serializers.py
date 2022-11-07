@@ -77,7 +77,7 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         """ Выводит заданное число рецептов автора в его карточке. """
         request = self.context['request']
-        rec_limit = request.GET.get('limit')
+        rec_limit = request.GET.get('recipes_limit')
         queryset = Recipe.objects.filter(author=obj.following)
         if rec_limit:
             queryset = queryset[:int(rec_limit)]
