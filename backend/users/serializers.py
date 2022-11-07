@@ -22,11 +22,11 @@ class UserReadSerializer(serializers.ModelSerializer):
                 and Follow.objects.filter(user=user, following=obj).exists())
 
 
-class UserSuccessSerializer(serializers.ModelSerializer):
-    """ Сериализатор вывода профилей пользователей. """
-    class Meta:
-        model = User
-        fields = ('email', 'id', 'username', 'first_name', 'last_name')
+# class UserSuccessSerializer(serializers.ModelSerializer):
+#     """ Сериализатор вывода профилей пользователей. """
+#     class Meta:
+#         model = User
+#         fields = ('email', 'id', 'username', 'first_name', 'last_name')
 
 
 class UserCreateSerializer(UserCreateSerializer):

@@ -11,16 +11,16 @@ from users.models import Follow, User
 from users.serializers import UserCreateSerializer, UserSuccessSerializer
 
 
-class UserCreateView(views.APIView):
-    """ Вью-класс для регистрации пользователя. """
-    def post(self, request):
-        serializer = UserCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            output = UserSuccessSerializer(request.data)
-            return Response(output.data, status=status.HTTP_201_CREATED)
+# class UserCreateView(views.APIView):
+#     """ Вью-класс для регистрации пользователя. """
+#     def post(self, request):
+#         serializer = UserCreateSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             output = UserSuccessSerializer(request.data)
+#             return Response(output.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
