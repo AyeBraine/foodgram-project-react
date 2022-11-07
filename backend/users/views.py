@@ -1,4 +1,5 @@
 # isort: skip_file
+from django.contrib.auth import get_user_model
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -10,7 +11,7 @@ from api.serializers import SubscriptionsSerializer, UserReadSerializer
 from users.models import Follow, User
 # from users.serializers import UserCreateSerializer, UserSuccessSerializer
 
-
+User = get_user_model()
 # class UserCreateView(views.APIView):
 #     """ Вью-класс для регистрации пользователя. """
 #     def post(self, request):
