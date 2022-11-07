@@ -1,5 +1,6 @@
 # isort: skip_file
 from django.contrib.auth import get_user_model
+from djoser.views import UserViewSet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -24,7 +25,7 @@ User = get_user_model()
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(UserViewSet):
     """ Вьюсет для пользователей. """
     pagination_class = AdjustablePagination
 
