@@ -82,6 +82,8 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
 
 class RecipeMiniSerializer(serializers.ModelSerializer):
     """ Сериализатор миниформата рецепта (для Favs и Cart). """
+    image = Base64ImageField()
+    
     class Meta:
         model = Recipe
         fields = ['name', 'image', 'cooking_time']
