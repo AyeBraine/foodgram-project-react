@@ -25,10 +25,11 @@ class IngredientPageSerializer(serializers.ModelSerializer):
 
 class ReciIngrediReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для вывода ингредиентов по get. """
-    id = serializers.ReadOnlyField(source='ingredient.id')
-    name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(
+    id = serializers.IntegerField(source='ingredient.id')
+    name = serializers.CharField(source='ingredient.name')
+    measurement_unit = serializers.CharField(
         source='ingredient.measurement_unit')
+    amount = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = ReciIngredi
@@ -89,7 +90,7 @@ class RecipeMiniSerializer(serializers.ModelSerializer):
 class RecipeReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для GET-запросов рецептов. """
     tags = TagSerializer(many=True, read_only=True)
-    author = UserReadSerializer()
+    author = UserReadSerializer(read_only=True)
     ingredients = serializers.SerializerMethodField()
     image = Base64ImageField(max_length=None, use_url=True)
     is_favorited = serializers.SerializerMethodField()
@@ -100,6 +101,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'tags', 'author', 'ingredients', 'name', 'image',
             'text', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
+        read_only_fields = ('id', 'author',)
 
     def get_is_favorited(self, obj):
         """ Возвращает True, если рецепт в списке покупок. """
