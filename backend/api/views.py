@@ -60,9 +60,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     #         return Response(serializer.data, status=status.HTTP_200_OK)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
     @action(detail=True, permission_classes=(permissions.IsAuthenticated,),
             methods=('post', 'delete'))
     def favorite(self, request, pk):

@@ -8,7 +8,7 @@ load_dotenv()
 
 SECRET_KEY = '@n$ryvt1+(p@w%w4&@w_rf)=9+20^xdekrn4g^l)dia9vyxv-q'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'web',

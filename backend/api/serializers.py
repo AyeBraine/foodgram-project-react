@@ -35,8 +35,8 @@ class ReciIngrediReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-class ReciIngrediMainSerializer(serializers.ModelSerializer):
-    """ Сериализатор для create/update вложенного блока рецептов. """
+class ReciIngrediWriteSerializer(serializers.ModelSerializer):
+    """ Сериализатор для create/update рецептов, мини-формат. """
     recipe = serializers.PrimaryKeyRelatedField(read_only=True)
     amount = serializers.IntegerField(write_only=True, min_value=1)
     id = serializers.PrimaryKeyRelatedField(
@@ -90,7 +90,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для GET-запросов рецептов. """
     tags = TagSerializer(many=True, read_only=True)
     author = UserReadSerializer()
-    ingredients = ReciIngrediMainSerializer(many=True)
+    ingredients = ReciIngrediReadSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -122,7 +122,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     """ Сериализатор для POST/PATCH-запросов рецептов. """
     tags = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Tag.objects.all())
-    ingredients = ReciIngrediMainSerializer(many=True)
+    ingredients = ReciIngrediWriteSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
     author = UserReadSerializer(read_only=True)
 
