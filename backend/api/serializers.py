@@ -90,7 +90,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для GET-запросов рецептов. """
     tags = TagSerializer(many=True, read_only=True)
     author = UserReadSerializer()
-    ingredients = ReciIngrediReadSerializer(many=True)
+    ingredients = serializers.SerializerMethodField()
     image = Base64ImageField(max_length=None, use_url=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -110,6 +110,10 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         """ Возвращает True, если рецепт в списке покупок. """
         user = self.context.get('request', False).user
         return user.pk and obj.in_cart_for.filter(id=user.pk).exists()
+
+    def get_ingredients(self, obj):
+        rec_ings = ReciIngredi.objects.filter(recipe=obj)
+        return ReciIngrediReadSerializer(rec_ings, many=True).data
 
     def validate_cooking_time(self, value):
         """ Время приготовления не более ~2 суток (некоторые супы). """
