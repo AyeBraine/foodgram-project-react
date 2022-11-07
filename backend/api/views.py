@@ -54,7 +54,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return (AuthorAdminOrReadOnly,)
         elif self.action in ('create',):
             return (permissions.IsAuthenticated,)
-        return (permissions.AllowAny)
+        return (permissions.AllowAny,)
 
     @action(detail=True, permission_classes=(permissions.IsAuthenticated,),
             methods=('post', 'delete'))
