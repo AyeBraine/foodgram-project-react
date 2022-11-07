@@ -1,4 +1,5 @@
 # isort: skip_file
+from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -28,7 +29,7 @@ class UserSuccessSerializer(serializers.ModelSerializer):
         fields = ('email', 'id', 'username', 'first_name', 'last_name')
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(UserCreateSerializer):
     """ Сериализатор создания пользователя. """
     email = serializers.EmailField(
         max_length=254,
@@ -45,7 +46,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(max_length=150)
     password = serializers.CharField()
 
-    class Meta:
+    class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('email', 'username', 'first_name',
                   'last_name', 'password')
