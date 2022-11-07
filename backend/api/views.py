@@ -50,11 +50,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return RecipeReadSerializer
 
     def get_permissions(self):
-        if self.action in ('update', 'partial_update', 'destroy'):
-            return (AuthorAdminOrReadOnly(),)
-        elif self.action in ('create',):
-            return (permissions.IsAuthenticated(),)
-        return (permissions.AllowAny(),)
+        if self.action != 'create':
+            return(AuthorAdminOrReadOnly(),)
+        return super().get_permissions()
 
     @action(detail=True, permission_classes=(permissions.IsAuthenticated,),
             methods=('post', 'delete'))
