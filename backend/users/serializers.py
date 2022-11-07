@@ -31,22 +31,39 @@ class UserSuccessSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(UserCreateSerializer):
     """ Сериализатор создания пользователя. """
-    email = serializers.EmailField(
-        max_length=254,
-        validators=(UniqueValidator(queryset=User.objects.all()),)
-    )
-    username = serializers.CharField(
-        max_length=64,
-        validators=(
-            UniqueValidator(queryset=User.objects.all()),
-            MeNameNotInUsername()
-        )
-    )
-    first_name = serializers.CharField(max_length=150)
-    last_name = serializers.CharField(max_length=150)
-    password = serializers.CharField()
-
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('email', 'username', 'first_name',
-                  'last_name', 'password')
+                  'last_name', 'password', 'id')
+
+    # email = serializers.EmailField(
+    #     max_length=254,
+    #     validators=(UniqueValidator(queryset=User.objects.all()),)
+    # )
+    # username = serializers.CharField(
+    #     max_length=64,
+    #     validators=(
+    #         UniqueValidator(queryset=User.objects.all()),
+    #         MeNameNotInUsername()
+    #     )
+    # )
+    # first_name = serializers.CharField(max_length=150)
+    # last_name = serializers.CharField(max_length=150)
+    # password = serializers.CharField()
+
+    # def create(self, validated_data):
+    #     password = validated_data.pop('password', None)
+    #     instance = self.Meta.model(**validated_data)
+    #     if password is not None:
+    #         instance.set_password(password)
+    #     instance.save()
+    #     return instance
+
+    # def update(self, instance, validated_data):
+    #     for attr, value in validated_data.items():
+    #         if attr == 'password':
+    #             instance.set_password(value)
+    #         else:
+    #             setattr(instance, attr, value)
+    #     instance.save()
+    #     return instance

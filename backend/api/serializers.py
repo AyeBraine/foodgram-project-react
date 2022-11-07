@@ -11,7 +11,6 @@ from users.serializers import UserReadSerializer
 
 class TagSerializer(serializers.ModelSerializer):
     """ Сериализатор тегов. """
-    pagination_class = None
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug')
@@ -34,13 +33,9 @@ class ReciIngrediReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReciIngredi
         fields = ('id', 'name', 'measurement_unit', 'amount')
-        validators = (UniqueTogetherValidator(
-                queryset=ReciIngredi.objects.all(),
-                fields=('recipe', 'ingredient')),
-        )
 
 
-class ReciIngrediWriteSerializer(serializers.ModelSerializer):
+class ReciIngrediMainSerializer(serializers.ModelSerializer):
     """ Сериализатор для create/update вложенного блока рецептов. """
     recipe = serializers.PrimaryKeyRelatedField(read_only=True)
     amount = serializers.IntegerField(write_only=True, min_value=1)
@@ -95,7 +90,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для GET-запросов рецептов. """
     tags = TagSerializer(many=True, read_only=True)
     author = UserReadSerializer()
-    ingredients = ReciIngrediReadSerializer(many=True)
+    ingredients = ReciIngrediMainSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -127,7 +122,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     """ Сериализатор для POST/PATCH-запросов рецептов. """
     tags = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Tag.objects.all())
-    ingredients = ReciIngrediWriteSerializer(many=True)
+    ingredients = ReciIngrediMainSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
     author = UserReadSerializer(read_only=True)
 
@@ -177,7 +172,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
-        """ Обеспечивает вывод response с вложен. сер-ми по ТЗ. """
         self.fields.pop('ingredients')
         self.fields.pop('tags')
         representation = super().to_representation(instance)

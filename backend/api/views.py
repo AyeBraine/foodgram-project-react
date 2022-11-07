@@ -2,6 +2,7 @@
 from django_filters import rest_framework as dfilters
 from rest_framework import filters, permissions, viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 
 from api.pagination import AdjustablePagination
 from api.permissions import AuthorAdminOrReadOnly
@@ -39,7 +40,7 @@ class IngredientFilter(dfilters.FilterSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     """ Вьюсет для вывода и фильтрации рецептов. """
     queryset = Recipe.objects.all().order_by('-pub_date')
-    permission_classes = (AuthorAdminOrReadOnly,)
+    permission_classes = 
     pagination_class = AdjustablePagination
     filter_backends = (dfilters.DjangoFilterBackend,)
     filterset_class = RecipeFilter
@@ -48,6 +49,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action in ('create', 'update', 'partial_update'):
             return RecipeWriteSerializer
         return RecipeReadSerializer
+
+    def get_permissions(self):
+        if self.action != 'create':
+            return (AuthorAdminOrReadOnly(),)
+        return super().get_permissions()
+
+    # def update(self, request):
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     @action(detail=True, permission_classes=(permissions.IsAuthenticated,),
             methods=('post', 'delete'))
@@ -65,6 +80,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class IngredientViewSet(viewsets.ModelViewSet):
     """ Вьюсет для вывода страницы со списком ингредиентов. """
     queryset = Ingredient.objects.all()
+    pagination_class = None
     serializer_class = IngredientPageSerializer
     permission_classes = (permissions.AllowAny,)
     filterset_class = (IngredientFilter,)
@@ -73,5 +89,6 @@ class IngredientViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     """ Вьюсет для вывода списка тегов. """
     queryset = Tag.objects.all()
+    pagination_class = None
     serializer_class = TagSerializer
     permission_classes = (permissions.AllowAny,)

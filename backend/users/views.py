@@ -48,7 +48,6 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(
             'errors: Нет подписок.', status=status.HTTP_404_NOT_FOUND)
 
-
     @action(
         detail=True,
         permission_classes=(IsAuthenticated,),
