@@ -95,7 +95,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     """ Сериализатор для GET-запросов рецептов. """
     tags = TagSerializer(many=True, read_only=True)
     author = UserReadSerializer()
-    ingredients = IngredientPageSerializer(many=True)
+    ingredients = ReciIngrediReadSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
