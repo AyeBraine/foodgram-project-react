@@ -39,12 +39,15 @@ class UserViewSet(viewsets.ModelViewSet):
     def subscriptions(self, request):
         user = request.user
         queryset = Follow.objects.filter(user=user)
+        cur_page = self.paginate_queryset(queryset)
         if queryset.exists():
             serializer = SubscriptionsSerializer(
-                queryset, many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
+                cur_page, many=True, context={'request': request})
+            return self.get_paginated_response(
+                serializer.data, status=status.HTTP_200_OK)
         return Response(
             'errors: Нет подписок.', status=status.HTTP_404_NOT_FOUND)
+
 
     @action(
         detail=True,

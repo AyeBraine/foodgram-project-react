@@ -18,7 +18,9 @@ services:
       - ./frontend/:/app/result_build/
 
   web:
-    image: ayebraine/foodgram-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 8001:8000
