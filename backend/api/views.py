@@ -41,6 +41,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """ Вьюсет для вывода и фильтрации рецептов. """
     queryset = Recipe.objects.all().order_by('-pub_date')
     pagination_class = AdjustablePagination
+    permission_classes = (AuthorAdminOrReadOnly,)
     filter_backends = (dfilters.DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
@@ -49,10 +50,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeWriteSerializer
         return RecipeReadSerializer
 
-    def get_permissions(self):
-        if self.action != 'create':
-            return(AuthorAdminOrReadOnly(),)
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action != 'create':
+    #         return(AuthorAdminOrReadOnly(),)
+    #     return super().get_permissions()
 
     @action(detail=True, permission_classes=(permissions.IsAuthenticated,),
             methods=('post', 'delete'))
