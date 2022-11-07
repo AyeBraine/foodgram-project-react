@@ -1,5 +1,5 @@
 # isort: skip_file
-from rest_framework import filters, status, views, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -24,12 +24,8 @@ from users.models import Follow, User
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """ Вьюсет для списка карточек пользователей. """
-    queryset = User.objects.all()
-    serializer_class = UserReadSerializer
+    """ Вьюсет для пользователей. """
     pagination_class = AdjustablePagination
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('^name',)
 
     @action(
         detail=False,
