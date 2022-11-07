@@ -74,7 +74,8 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         """ Выводит заданное число рецептов автора в его карточке. """
         request = self.context['request']
         rec_limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj.following)
+        queryset = Recipe.objects.filter(
+            author=obj.following).order_by('-pub-date')
         if rec_limit:
             queryset = queryset[:int(rec_limit)]
         return RecipeMiniSerializer(queryset, many=True).data
@@ -83,7 +84,7 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
 class RecipeMiniSerializer(serializers.ModelSerializer):
     """ Сериализатор миниформата рецепта (для Favs и Cart). """
     image = Base64ImageField()
-    
+
     class Meta:
         model = Recipe
         fields = ['name', 'image', 'cooking_time']

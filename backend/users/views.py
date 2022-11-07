@@ -36,7 +36,7 @@ class UserViewSet(UserViewSet):
     )
     def subscriptions(self, request):
         user = request.user
-        queryset = Follow.objects.filter(user=user).order_by('-pub_date')
+        queryset = Follow.objects.filter(user=user)
         cur_page = self.paginate_queryset(queryset)
         if queryset.exists():
             serializer = SubscriptionsSerializer(
