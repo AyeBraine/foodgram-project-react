@@ -51,7 +51,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ('update', 'partial_update', 'destroy'):
-            return (AuthorAdminOrReadOnly(),)
+            return (AuthorAdminOrReadOnly,)
         elif self.action in ('create',):
             return (permissions.IsAuthenticated,)
         return (permissions.AllowAny)
