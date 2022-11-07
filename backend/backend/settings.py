@@ -106,10 +106,10 @@ USE_TZ = True
 
 # added and modified configs
 
-STATIC_URL = '/static/'
+STATIC_URL = '/backend_static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/backend_media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INTERNAL_IPS = [
