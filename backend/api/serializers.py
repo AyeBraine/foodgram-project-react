@@ -2,7 +2,6 @@
 from django.core.exceptions import ValidationError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import Ingredient, ReciIngredi, Recipe, Tag
 from users.models import Follow
@@ -153,6 +152,8 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """ Создаёт вложенные сериализаторы tag и ingredient. """
         current_user = self.context['request'].user
+        if not current_user.pk:
+            raise serializers.ValidationError('Пользователя не существует.')
         ingredients_data = validated_data.pop('ingredients')
         tags_data = validated_data.pop('tags')
         recipe = Recipe.objects.create(author=current_user, **validated_data)

@@ -87,6 +87,12 @@ class ReciIngredi(models.Model):
         validators=(MinValueValidator(1, message='Не менее 1 ед.'),)
     )
 
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(fields=('recipe', 'ingredient'),
+                                    name='unique_recipe_ingredient'),)
+        db_table = 'recipes_recipe_ingredient'
+
     def __str__(self):
         return f'{self.ingredient} в рецепте {self.recipe}'
 

@@ -15,6 +15,10 @@ from recipes.models import ReciIngredi, Recipe
 
 
 def flag_add_delete(request, pk, model):
+    if not request.user.pk:
+        return Response(
+            {'errors': 'Недоступно анонимным пользователям.'},
+            status=status.HTTP_400_BAD_REQUEST)
     user = request.user
     recipe = get_object_or_404(Recipe, pk=pk)
     object = model.objects.filter(user=user, recipe=recipe)
