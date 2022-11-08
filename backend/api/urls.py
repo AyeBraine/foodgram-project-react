@@ -9,10 +9,10 @@ from users.views import UserViewSet
 app_name = 'api'
 
 router = routers.DefaultRouter()
-router.register('recipes', RecipeViewSet)
-router.register('ingredients', IngredientViewSet)
+router.register('recipes', RecipeViewSet, basename='recipes')
+router.register('ingredients', IngredientViewSet, basename='ingredients')
 router.register('users', UserViewSet, basename='users')
-router.register('tags', TagViewSet)
+router.register('tags', TagViewSet, basename='tags')
 
 urlpatterns = [
     path('recipes/download_shopping_cart/', CartPDFExportView.as_view(),
