@@ -107,12 +107,12 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         """ Возвращает True, если рецепт в списке покупок. """
-        user = self.context.get('request', False).user
+        user = self.context.get('request').user
         return user.pk and obj.faved_by.filter(id=user.pk).exists()
 
     def get_is_in_shopping_cart(self, obj):
         """ Возвращает True, если рецепт в списке покупок. """
-        user = self.context.get('request', False).user
+        user = self.context.get('request').user
         return user.pk and obj.in_cart_for.filter(id=user.pk).exists()
 
     def get_ingredients(self, obj):
