@@ -19,8 +19,8 @@ class RecipeFilter(dfilters.FilterSet):
         field_name='tags__slug', to_field_name='slug',
         queryset=Tag.objects.all(),)
     author = dfilters.ModelChoiceFilter(queryset=User.objects.all())
-    is_favorited = dfilters.BooleanFilter(field_name='faved_by')
-    is_in_shopping_cart = dfilters.BooleanFilter(field_name='in_cart_for')
+    # is_favorited = dfilters.BooleanFilter(field_name='faved_by')
+    # is_in_shopping_cart = dfilters.BooleanFilter(field_name='in_cart_for')
 
     class Meta:
         model = Recipe
@@ -55,12 +55,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return(AuthorAdminOrReadOnly(),)
         return super().get_permissions()
 
-    @action(detail=True, methods=('post', 'delete'))
+    @action(detail=True, permission_classes = (permissions.IsAuthenticated,),
+            methods=('post', 'delete'))
     def favorite(self, request, pk):
         """ Добавление в Избранное и удаление оттуда. """
         return flag_add_delete(request, pk, Favorite)
 
-    @action(detail=True, methods=('post', 'delete'))
+    @action(detail=True, permission_classes = (permissions.IsAuthenticated,),
+            methods=('post', 'delete'))
     def shopping_cart(self, request, pk):
         """ Добавление в Список покупок и удаление оттуда. """
         return flag_add_delete(request, pk, Cart)
