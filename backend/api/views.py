@@ -46,16 +46,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
 
     def get_queryset(self):
-        user = self.request.user
-        if not user.pk:
-            return Recipe.objects.all()
         is_favorited = self.request.query_params.get('is_favorited')
         if is_favorited is not None and int(is_favorited) == 1:
-            return Recipe.faved_by.filter(id=user.pk)
+            return Recipe.objects.filter(faved_by=self.request.user.id)
         is_in_shopping_cart = self.request.query_params.get(
             'is_in_shopping_cart')
         if is_in_shopping_cart is not None and int(is_in_shopping_cart) == 1:
-            return Recipe.in_cart_for.filter(id=user.pk)
+            return Recipe.objects.filter(in_cart_for=self.request.user.id)
         return Recipe.objects.all()
 
     def get_serializer_class(self):
