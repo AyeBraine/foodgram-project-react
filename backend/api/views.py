@@ -19,6 +19,8 @@ class RecipeFilter(dfilters.FilterSet):
         field_name='tags__slug', to_field_name='slug',
         queryset=Tag.objects.all(),)
     author = dfilters.ModelChoiceFilter(queryset=User.objects.all())
+    # is_favorited = dfilters.BooleanFilter(field_name='faved_by')
+    # is_in_shopping_cart = dfilters.BooleanFilter(field_name='in_cart_for')
 
     class Meta:
         model = Recipe
