@@ -13,18 +13,18 @@ from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
 from users.models import User
 
 
-# class RecipeFilter(dfilters.FilterSet):
-#     """ Фильтр для вывода рецептов по query parameters. """
-#     tags = dfilters.ModelMultipleChoiceFilter(
-#         field_name='tags__slug', to_field_name='slug',
-#         queryset=Tag.objects.all(),)
-#     author = dfilters.ModelChoiceFilter(queryset=User.objects.all())
-#     # is_favorited = dfilters.BooleanFilter(field_name='faved_by')
-#     # is_in_shopping_cart = dfilters.BooleanFilter(field_name='in_cart_for')
+class RecipeFilter(dfilters.FilterSet):
+    """ Фильтр для вывода рецептов по query parameters. """
+    tags = dfilters.ModelMultipleChoiceFilter(
+        field_name='tags__slug', to_field_name='slug',
+        queryset=Tag.objects.all(),)
+    author = dfilters.ModelChoiceFilter(queryset=User.objects.all())
+    # is_favorited = dfilters.BooleanFilter(field_name='faved_by')
+    # is_in_shopping_cart = dfilters.BooleanFilter(field_name='in_cart_for')
 
-#     class Meta:
-#         model = Recipe
-#         fields = ('author', 'tags',)
+    class Meta:
+        model = Recipe
+        fields = ('author', 'tags',)
 
 
 class IngredientFilter(dfilters.FilterSet):
@@ -42,8 +42,21 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = AdjustablePagination
     permission_classes = (permissions.AllowAny,)
-    # filter_backends = (dfilters.DjangoFilterBackend,)
-    # filterset_class = RecipeFilter
+    filter_backends = (dfilters.DjangoFilterBackend,)
+    filterset_class = RecipeFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.pk:
+            return Recipe.objects.all()
+        is_favorited = self.request.query_params.get('is_favorited')
+        if is_favorited is not None and int(is_favorited) == 1:
+            return Recipe.faved_by.filter(id=user.pk)
+        is_in_shopping_cart = self.request.query_params.get(
+            'is_in_shopping_cart')
+        if is_in_shopping_cart is not None and int(is_in_shopping_cart) == 1:
+            return Recipe.in_cart_for.filter(id=user.pk)
+        return Recipe.objects.all()
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
