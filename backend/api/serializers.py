@@ -108,21 +108,21 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     def get_queryset(self):
         is_favorited = self.request.query_params.get('is_favorited')
         if is_favorited is not None and int(is_favorited) == 1:
-            return Recipe.objects.filter(faved_by__user=self.request.user)
+            return Recipe.objects.filter(faved_by__id=self.request.user.pk)
         is_in_shopping_cart = self.request.query_params.get(
             'is_in_shopping_cart')
         if is_in_shopping_cart is not None and int(is_in_shopping_cart) == 1:
-            return Recipe.objects.filter(in_cart_for__user=self.request.user)
+            return Recipe.objects.filter(in_cart_for__id=self.request.user.pk)
         return Recipe.objects.all()
 
     def get_is_favorited(self, obj):
         """ Возвращает True, если рецепт в списке покупок. """
-        user = self.context.get('request').user
+        user = self.context['request'].user
         return user.pk and obj.faved_by.filter(id=user.pk).exists()
 
     def get_is_in_shopping_cart(self, obj):
         """ Возвращает True, если рецепт в списке покупок. """
-        user = self.context.get('request').user
+        user = self.context['request'].user
         return user.pk and obj.in_cart_for.filter(id=user.pk).exists()
 
     def get_ingredients(self, obj):
